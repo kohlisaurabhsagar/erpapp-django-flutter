@@ -1,0 +1,15 @@
+POST http://127.0.0.1:8000/accounts/login/
+Content-Type: application/json
+
+{
+    "userid": "user2",
+    "password": "user2"
+}
+
+#####
+POST http://127.0.0.1:8000/accounts/logout/
+Content-Type: application/json
+Authorization: Token c4849d67f0cef8212b9d61e5d2ec7ed087b4fd12592bfab97084e8510beff9a0
+
+{}
+
