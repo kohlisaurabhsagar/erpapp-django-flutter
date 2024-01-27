@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_frontend/app_screens/dr_call_page2.dart';
+import 'package:flutter_frontend/custom_routes/constant.dart';
 
 class DrCall extends StatefulWidget {
   const DrCall({Key? key}) : super(key: key);
@@ -60,10 +60,7 @@ class _DrCallState extends State<DrCall> {
                 width: 380.0,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const DrCall2()));
+                    Navigator.pushNamed(context, drCall2Route);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 43, 175, 96),

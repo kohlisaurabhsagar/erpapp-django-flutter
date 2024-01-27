@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_frontend/app_screens/dr_call_page1.dart';
-import 'package:flutter_frontend/app_screens/dr_call_page3.dart';
-import 'package:flutter_frontend/app_screens/dr_sample1.dart';
+import 'package:flutter_frontend/custom_routes/constant.dart';
 
 class DrCall2 extends StatefulWidget {
   const DrCall2({Key? key}) : super(key: key);
@@ -58,10 +56,7 @@ class _DrCall2State extends State<DrCall2> {
                 child: Material(
                     child: InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const DrCall3()));
+                          Navigator.pushNamed(context, drCall3Route);
                         },
                         child: Container(
                           padding: const EdgeInsets.all(12),
@@ -166,10 +161,7 @@ class _DrCall2State extends State<DrCall2> {
                     width: 185.0,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const DrSample1()));
+                        Navigator.pushNamed(context, drSample1Route);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 43, 175, 96),
@@ -191,10 +183,7 @@ class _DrCall2State extends State<DrCall2> {
                     width: 185.0,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const DrCall()));
+                        Navigator.pushNamed(context, drCall1Route);
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor:

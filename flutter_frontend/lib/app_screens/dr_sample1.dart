@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_frontend/app_screens/dr_sample2.dart';
-import 'package:flutter_frontend/app_screens/dr_call_page3.dart';
+import 'package:flutter_frontend/custom_routes/constant.dart';
 // import 'package:flutter_frontend/app_screens/landing_page.dart';
 
 class DrSample1 extends StatefulWidget {
@@ -58,10 +57,7 @@ class _DrSample1State extends State<DrSample1> {
                 child: Material(
                     child: InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const DrCall3()));
+                          Navigator.pushNamed(context, drCall3Route);
                         },
                         child: Container(
                           padding: const EdgeInsets.all(12),
@@ -144,10 +140,7 @@ class _DrSample1State extends State<DrSample1> {
                         width: 90.0,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const DrSample2()));
+                            Navigator.pushNamed(context, drSample2Route);
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor:

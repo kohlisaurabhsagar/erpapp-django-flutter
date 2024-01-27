@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_frontend/app_screens/dr_call_page1.dart';
-import 'package:flutter_frontend/app_screens/login_page.dart';
+import 'package:flutter_frontend/custom_routes/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -41,7 +40,7 @@ class _LandingPageState extends State<LandingPage> {
     'Summary',
     'Final Submit'
   ];
-  int check = 0;
+  bool _authentication = true;
   int id = 0;
   String userId = '';
   String firstName = '';
@@ -69,13 +68,12 @@ class _LandingPageState extends State<LandingPage> {
       );
       // if (response.statusCode == 200) {
       setState(() {
-        check = 1;
+        _authentication = false;
       });
       // }
     } catch (error) {
-      //
+      // print('Exception: $error');
     }
-    ;
   }
 
   @override
@@ -122,9 +120,9 @@ class _LandingPageState extends State<LandingPage> {
               accountName: Text(
                 '$firstName',
               ),
-              accountEmail: Text("Demo"),
-              decoration: BoxDecoration(color: Color(0xFF04649c)),
-              currentAccountPicture: CircleAvatar(
+              accountEmail: const Text("Demo"),
+              decoration: const BoxDecoration(color: Color(0xFF04649c)),
+              currentAccountPicture: const CircleAvatar(
                 child: ClipOval(
                   child: Icon(
                     Icons.person_3,
@@ -151,14 +149,14 @@ class _LandingPageState extends State<LandingPage> {
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text("Logout"),
-              onTap: () {
+              onTap: () async {
                 logout(token);
-                if (check == 1) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()));
-                }
+                // Introduce a delay of 3 seconds after loginUser
+                Future.delayed(const Duration(seconds: 3), () {
+                  if (_authentication == false) {
+                    Navigator.pushNamed(context, loginRoute);
+                  }
+                });
               },
             ),
           ],
@@ -236,11 +234,7 @@ class _LandingPageState extends State<LandingPage> {
                                     current3 = index;
                                   });
                                   if (current3 == 1) {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const DrCall()));
+                                    Navigator.pushNamed(context, drCall1Route);
                                   }
                                 },
                                 child: Container(
