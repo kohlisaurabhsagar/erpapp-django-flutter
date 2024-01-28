@@ -40,7 +40,7 @@ class _LandingPageState extends State<LandingPage> {
     'Summary',
     'Final Submit'
   ];
-  bool _authentication = true;
+  bool _authenticationed = true;
   int id = 0;
   String userId = '';
   String firstName = '';
@@ -48,29 +48,37 @@ class _LandingPageState extends State<LandingPage> {
   String phoneNumber = '';
   String token = '';
 
-  Future<void> userdata() async {
+  Future<void> getuserdata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      int id = prefs.getInt('id') ?? 0;
-      String userId = prefs.getString('userId') ?? '';
-      String firstName = prefs.getString('firstName') ?? '';
-      String lastName = prefs.getString('lastName') ?? '';
-      String phoneNumber = prefs.getString('phoneNumber') ?? '';
-      String token = prefs.getString('token') ?? '';
+      id = prefs.getInt('id') ?? 0;
+      userId = prefs.getString('userId') ?? '';
+      firstName = prefs.getString('firstName') ?? '';
+      lastName = prefs.getString('lastName') ?? '';
+      phoneNumber = prefs.getString('phoneNumber') ?? '';
+      token = prefs.getString('token') ?? '';
     });
+  }
+
+  Future<void> clearAllData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
   }
 
   Future<void> logout(String token) async {
     try {
       var response = await http.post(
         Uri.parse("http://10.0.2.2:8000/accounts/logout/"),
-        body: {'token': token},
+        headers: {
+          'Authorization': 'Token $token',
+        },
       );
-      // if (response.statusCode == 200) {
-      setState(() {
-        _authentication = false;
-      });
-      // }
+      print(response.statusCode);
+      if (response.statusCode == 204) {
+        setState(() {
+          _authenticationed = false;
+        });
+      }
     } catch (error) {
       // print('Exception: $error');
     }
@@ -79,6 +87,7 @@ class _LandingPageState extends State<LandingPage> {
   @override
   void initState() {
     super.initState();
+    getuserdata();
     // Set the status bar color to blue
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Color.fromARGB(255, 3, 5, 91), // Set the status bar color
@@ -117,10 +126,8 @@ class _LandingPageState extends State<LandingPage> {
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              accountName: Text(
-                '$firstName',
-              ),
-              accountEmail: const Text("Demo"),
+              accountName: Text('$firstName $lastName'),
+              accountEmail: Text(' $phoneNumber'),
               decoration: const BoxDecoration(color: Color(0xFF04649c)),
               currentAccountPicture: const CircleAvatar(
                 child: ClipOval(
@@ -151,9 +158,10 @@ class _LandingPageState extends State<LandingPage> {
               title: const Text("Logout"),
               onTap: () async {
                 logout(token);
-                // Introduce a delay of 3 seconds after loginUser
-                Future.delayed(const Duration(seconds: 3), () {
-                  if (_authentication == false) {
+                // Introduce a delay of 2 seconds after loginUser
+                Future.delayed(const Duration(seconds: 2), () {
+                  if (_authenticationed == false) {
+                    clearAllData();
                     Navigator.pushNamed(context, loginRoute);
                   }
                 });
@@ -235,6 +243,10 @@ class _LandingPageState extends State<LandingPage> {
                                   });
                                   if (current3 == 1) {
                                     Navigator.pushNamed(context, drCall1Route);
+                                  }
+                                  if (current3 == 3) {
+                                    Navigator.pushNamed(
+                                        context, drSample1Route);
                                   }
                                 },
                                 child: Container(

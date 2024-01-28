@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
         prefs.setString('token', responseData['token']);
       }
     } catch (error) {
-      print('Exception: $error');
+      // print('Exception: $error');
       setState(() {
         _exception = true;
       });

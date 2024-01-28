@@ -149,7 +149,10 @@ REST_KNOX = {
     'TOKEN_TTL' : timedelta(hours=1),
 }
 
-
+# GRAPH_MODELS = {
+#   'all_applications': True,
+#   'group_models': True,
+# }
 
 
 # env = environ.Env(
