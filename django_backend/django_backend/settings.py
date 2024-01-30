@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     "knox",
     "accounts",
     "company",
-    "userprofile",
     
 ]
 
