@@ -14,18 +14,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //------------------------------------------------------------------------------------------
+  // getting all the input values entered by use on login page
   final TextEditingController _companyCodeController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
-
+//--------------------------------------------------------------------------------------------
+  final _formKey = GlobalKey<
+      FormState>(); //defining the form to take user input and  easy form validation
+//-------------------------------------------------------------------------------------------
+// all the necessary variables are declared and initialized here
   var userid = "";
   var company = "";
   var password = "";
   bool _authentication = false;
   bool _exception = false;
-
+//--------------------------------------------------------------------------------------------
+// this method is used to show error message to the user in the form of pop up.
   void _showErrorToast(String message) {
     Fluttertoast.showToast(
       msg: message,
@@ -40,16 +45,49 @@ class _LoginPageState extends State<LoginPage> {
     _showErrorToast(errorMessage);
   }
 
+//----------------------------------------------------------------------------------------------
   Future<void> loginUser(String userid, String password) async {
+    //--------------------------------------------------------------------------
     try {
+      //---------------------------------------------------------------------------
+      //making the login api call to fetch the use data but as backend api only takes userid and password data to login,so further call would be required to verify the company code provided by user
       var response = await http.post(
         Uri.parse("http://10.0.2.2:8000/accounts/login/"),
         body: {'userid': userid, 'password': password},
       );
       if (response.statusCode == 200) {
-        setState(() {
-          _authentication = true;
-        });
+        // Parse the JSON string into a Map
+        Map<String, dynamic> jsonData1 = json.decode(response.body);
+
+        // Extract the "company" field
+        int compid = jsonData1['user']['company'];
+        String token = jsonData1['token'];
+        //------------------------------------------------------------------------
+        //making the api call again to fetch the company name as company id is fetched in the response variable (as login api only provides the company id)
+        var response2 = await http
+            .get(Uri.parse("http://10.0.2.2:8000/company/companies/$compid/"));
+
+        Map<String, dynamic> jsonData2 = json.decode(response2.body);
+
+        // Extract the "company" field
+        String companyName = jsonData2['company_name'];
+        //--------------------------------------------------------------------------------------
+        // comparing the fetched company name with the user provided company name, if both are equal then setting the authentication varaibale true so that the user can navigate to next page
+        if (company.toLowerCase() == companyName) {
+          setState(() {
+            _authentication = true;
+          });
+        } else {
+          // logging out from the backend, as we have logged in but company code verification being failed so no navigation to the next page for the user
+          await http.post(
+            Uri.parse("http://10.0.2.2:8000/accounts/logout/"),
+            headers: {
+              'Authorization': 'Token $token',
+            },
+          );
+        }
+        //---------------------------------------------------------------------------
+        //saving all the values got from backend to the persistence storage provided by flutter so that this information can be made available to all other appscreen pages instead of making the api calls again
         Map<String, dynamic> responseData = json.decode(response.body);
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -61,14 +99,18 @@ class _LoginPageState extends State<LoginPage> {
         prefs.setString('phoneNumber', responseData['user']['phone_number']);
         prefs.setString('token', responseData['token']);
       }
+      // --------------------------------------------------------------------------
     } catch (error) {
-      // print('Exception: $error');
+      // print('Exception: $error'); //to debug the code
       setState(() {
-        _exception = true;
+        _exception =
+            true; //setting the exception variable to true so that the error message  can be shown to the frontend otherwise invalid credentials messgage would be shown
       });
     }
   }
 
+//--------------------------------------------------------------------------------------
+// overriding the system UI for the status bar of the app to set its color to desired color
   @override
   void initState() {
     super.initState();
@@ -82,10 +124,11 @@ class _LoginPageState extends State<LoginPage> {
     ));
   }
 
+//-------------------------------------------------------------------------------------------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color.fromARGB(253, 253, 253, 253),
+        backgroundColor: const Color.fromARGB(248, 251, 250, 250),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -283,12 +326,24 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Container(
+                              alignment: Alignment.bottomCenter,
+                              child: const Text(
+                                '                  Version 20220309 \n Copyright(c) Designed and Developed',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 9, 8, 8),
+                                    fontSize: 15.0),
+                              ),
+                            ),
                             Container(
                               alignment: Alignment.bottomCenter,
                               child: Image.asset(
                                 'assets/images/image2.png',
                                 width: double.infinity,
-                                height: 300,
+                                height: 240,
                               ),
                             ),
                           ],

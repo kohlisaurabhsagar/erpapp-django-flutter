@@ -16,6 +16,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     Future.delayed(const Duration(seconds: 3), () {
+      //pushing the login page of the app automatically after 3 seconds of the splash page
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const LoginPage()));
     });
@@ -31,7 +32,8 @@ class _SplashScreenState extends State<SplashScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset("assets/images/image1.png", width: 200, height: 200)
+              Image.asset("assets/images/image1.png",
+                  width: 200, height: 200) //splash page image directory
             ],
           )),
     );

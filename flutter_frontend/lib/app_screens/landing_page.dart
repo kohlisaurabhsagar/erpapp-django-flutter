@@ -12,10 +12,19 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  //---------------------------------------------------------------------------------
+  //variable declared to keep track of which bottom-navigation button is clicked
   int current1 = 0;
+  //variable declared to keep track of which upper-naviagtion button is clicked
   int current2 = 0;
+  //variable declared to keep track of which menu-item is clicked
   int current3 = 0;
+
+  //-----------------------------------------------------------------------------------
+  //list containing the name of the upper navigation bar to iterate over
   List<String> items = ["DCR", "Master", "Transaction", "Report"];
+  //-----------------------------------------------------------------------------------
+  //list containting the directory of menu-items icons
   List imgD = [
     'assets/images/image3.png',
     'assets/images/image4.png',
@@ -28,6 +37,8 @@ class _LandingPageState extends State<LandingPage> {
     'assets/images/image11.png',
     'assets/images/image12.png'
   ];
+  //-------------------------------------------------------------------------------------------
+  //list contains the names of all menu-items which can be iterated over inside gridview widget to create a menu
   List nameD = [
     'Day Plan',
     'Dr. Call',
@@ -40,6 +51,8 @@ class _LandingPageState extends State<LandingPage> {
     'Summary',
     'Final Submit'
   ];
+  //-------------------------------------------------------------------------------------------
+  // varaibles declared
   bool _authenticationed = true;
   int id = 0;
   String userId = '';
@@ -48,6 +61,8 @@ class _LandingPageState extends State<LandingPage> {
   String phoneNumber = '';
   String token = '';
 
+  //-------------------------------------------------------------------------------------------
+  //getting the data out of the persistence storage
   Future<void> getuserdata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -60,11 +75,15 @@ class _LandingPageState extends State<LandingPage> {
     });
   }
 
+  //--------------------------------------------------------------------------------------------
+  // method to clear the persistence storage after the logout of the app
   Future<void> clearAllData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
   }
 
+  //--------------------------------------------------------------------------------------------
+  // method to get logout of the the app
   Future<void> logout(String token) async {
     try {
       var response = await http.post(
@@ -73,7 +92,7 @@ class _LandingPageState extends State<LandingPage> {
           'Authorization': 'Token $token',
         },
       );
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 204) {
         setState(() {
           _authenticationed = false;
@@ -84,6 +103,7 @@ class _LandingPageState extends State<LandingPage> {
     }
   }
 
+  //------------------------------------------------------------------------------------------------
   @override
   void initState() {
     super.initState();
@@ -103,13 +123,15 @@ class _LandingPageState extends State<LandingPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color.fromARGB(253, 253, 253, 253),
+        //------------------------------------------------------------------------------------------------------------------------------
+        //appbar declared
         appBar: AppBar(
           backgroundColor: const Color(0xFF04649c),
           toolbarHeight: 75.0,
           iconTheme: const IconThemeData(color: Colors.white),
           titleSpacing: 1.0,
           title: const Text(
-            "ABACUS PHARMA LIMITED",
+            "ALPHA HEALTH INDIA",
             style: TextStyle(color: Colors.white),
           ),
           actions: <Widget>[
@@ -121,6 +143,8 @@ class _LandingPageState extends State<LandingPage> {
                 )),
           ],
         ),
+        //-----------------------------------------------------------------------------------------------------------------------------
+        //sidebar declared
         drawer: Drawer(
             child: ListView(
           padding: EdgeInsets.zero,
@@ -169,6 +193,8 @@ class _LandingPageState extends State<LandingPage> {
             ),
           ],
         )),
+        //------------------------------------------------------------------------------------------------------------------------
+        //upper-navigation bar declared
         body: Container(
           color: Colors.white,
           width: double.infinity,
@@ -220,6 +246,8 @@ class _LandingPageState extends State<LandingPage> {
                               ));
                         })),
               ),
+              //-----------------------------------------------------------------------------------------------------------
+              //main body where menu-items are present
               Container(
                   margin: const EdgeInsets.only(
                       top: 40, bottom: 5, left: 10, right: 10),
@@ -247,6 +275,14 @@ class _LandingPageState extends State<LandingPage> {
                                   if (current3 == 3) {
                                     Navigator.pushNamed(
                                         context, drSample1Route);
+                                  }
+                                  if (current3 == 4) {
+                                    Navigator.pushNamed(
+                                        context, chemistCall1Route);
+                                  }
+                                  if (current3 == 6) {
+                                    Navigator.pushNamed(
+                                        context, customerCall1Route);
                                   }
                                 },
                                 child: Container(
@@ -284,6 +320,8 @@ class _LandingPageState extends State<LandingPage> {
             ],
           ),
         ),
+        //-----------------------------------------------------------------------------------------------------
+        //bottomnaviagation bar
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: const Color(0xFF04649c),
           selectedItemColor: Colors.white,

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/app_screens/customer_call_page1.dart';
 import 'package:flutter_frontend/custom_routes/constant.dart';
 import 'package:flutter_frontend/app_screens/dr_sample2.dart';
 import 'package:flutter_frontend/app_screens/dr_sample1.dart';
 import 'package:flutter_frontend/app_screens/dr_call_page3.dart';
 import 'package:flutter_frontend/app_screens/dr_call_page2.dart';
 import 'package:flutter_frontend/app_screens/dr_call_page1.dart';
+import 'package:flutter_frontend/app_screens/chemist_call_page1.dart';
 import 'package:flutter_frontend/app_screens/login_page.dart';
 import 'package:flutter_frontend/app_screens/landing_page.dart';
 
+// defined all appscreen routes
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -27,6 +30,10 @@ class Routers {
         return MaterialPageRoute(builder: (_) => const DrCall2());
       case drCall3Route:
         return MaterialPageRoute(builder: (_) => const DrCall3());
+      case chemistCall1Route:
+        return MaterialPageRoute(builder: (_) => const ChemistCall());
+      case customerCall1Route:
+        return MaterialPageRoute(builder: (_) => const CustomerCall());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
